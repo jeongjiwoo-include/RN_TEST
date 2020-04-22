@@ -199,11 +199,11 @@ _facebookLogin = async() => {
           onPress={this._signIn}
           />
           <TouchableOpacity 
-          style={{width: 300, height : 40, marginTop: 10}}
+          style={styles.FBButton}
           onPress={this._facebookLogin}  
           >
           <Image source={require('../assets/FBLogo2.jpg')}
-           style = {{ width: 300, height: 40,alignItems:'center'}}/>
+           style = {{ borderRadius: 3, width: 300, height: 40, alignItems:'center'}}/>
           </TouchableOpacity>
         </View>
             </View>
@@ -252,6 +252,12 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 300,
     marginTop: 90,
+  },
+  FBButton:{
+    width: 300, 
+    height : 48, 
+    marginTop: 10, 
+    borderRadius: 3,
   }
 });
 export default App;
