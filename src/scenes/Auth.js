@@ -199,10 +199,11 @@ _facebookLogin = async() => {
           onPress={this._signIn}
           />
           <TouchableOpacity 
-          style={{borderColor: '#007aff',alignItems:'center', width: 300, height : 36, marginTop: 10,backgroundColor:'blue'}}
+          style={{width: 300, height : 40, marginTop: 10}}
           onPress={this._facebookLogin}  
           >
-          <Text style={{fontSize: 16, color: 'white',textAlignVertical: 'center',textAlign: 'center'}}>Facebook Sign in</Text>
+          <Image source={require('../assets/FBLogo2.jpg')}
+           style = {{ width: 300, height: 40,alignItems:'center'}}/>
           </TouchableOpacity>
         </View>
             </View>
