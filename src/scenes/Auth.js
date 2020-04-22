@@ -11,7 +11,9 @@ import {
   ImageBackground,
   Image,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  Button,
+  TextComponent,
 } from 'react-native';
 
 import {
@@ -27,7 +29,17 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-community/google-signin';
+
+import{
+  LoginButton,
+  LoginManager,
+  AccessToken,
+} from 'react-native-fbsdk';
+
+import {Facebook} from 'react-native-fbsdk';
+
 import {firebase} from '@react-native-firebase/auth';
+import { color } from 'react-native-reanimated';
 
 class A1_AuthPage extends Component {
   constructor(props) {
@@ -110,6 +122,31 @@ _signOut = async() => {
         console.error(error);
     }
 };
+
+_facebookLogin = async() => {
+  try{
+    await LoginManager.logInWithPermissions(['public_profile', 'email', 'user_friends']);
+    
+    // Once signed in, get the users AccesToken
+    const accessTokenData = await AccessToken.getCurrentAccessToken();
+
+    // Create a Firebase credential with the AccessToken
+    const credential = firebase.auth.FacebookAuthProvider.credential(accessTokenData.accessToken);
+    console.log("token: "+accessTokenData.accessToken);
+    // Sign-in the user with the credential
+    const facebookUserCredential = await firebase.auth().signInWithCredential(credential);
+    console.log(facebookUserCredential);
+    console.log(facebookUserCredential.user.displayName+facebookUserCredential.user.email+facebookUserCredential.user.photoURL);
+    this.setState({ 
+      name:facebookUserCredential.user.displayName,
+      email:facebookUserCredential.user.email,
+      photo:facebookUserCredential.user.photoURL 
+  })
+  } catch(e){
+    console.error(e);
+  }
+};
+
   render() {
     if(this.state.gettingLoginStatus){
       return(
@@ -130,8 +167,12 @@ _signOut = async() => {
                     <Text style = {styles.Slogan}>편하게 요리하자</Text>
                     <Image source={require('../assets/Logo.png')} style = {styles.Logo } />
                   </View>
-                  <View style = {styles.text}>
-                    Name: {this.state.userInfo.user.name}{' '}
+                  <View style = {styles.Button}>
+                    <TouchableOpacity 
+                    style={{borderColor: '#007aff',alignItems:'center', width: 300, height : 36, marginTop: 10,fontSize:12,backgroundColor:'white'}}
+                    onPress={this._signOut}>
+                      <Text>Google Logout</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -152,11 +193,17 @@ _signOut = async() => {
               </View>
               <View style = {styles.Button}>
           <GoogleSigninButton 
-          style={{ width: 312, height: 48 }}
+          style={{ width: 312, height: 48}}
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Light}
           onPress={this._signIn}
           />
+          <TouchableOpacity 
+          style={{borderColor: '#007aff',alignItems:'center', width: 300, height : 36, marginTop: 10,backgroundColor:'blue'}}
+          onPress={this._facebookLogin}  
+          >
+          <Text style={{fontSize: 16, color: 'white',textAlignVertical: 'center',textAlign: 'center'}}>Facebook Sign in</Text>
+          </TouchableOpacity>
         </View>
             </View>
           </View>
