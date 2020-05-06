@@ -1,6 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { Fonts } from '../Font';
+import 'react-native-gesture-handler';
 import {
   SafeAreaView,
   StyleSheet,
